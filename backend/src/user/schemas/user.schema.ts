@@ -5,6 +5,7 @@ export type User = {
   email: string;
   password: string;
   img: Buffer;
+  posts: [];
 };
 
 export const UserSchema = new mongoose.Schema(

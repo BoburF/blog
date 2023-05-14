@@ -1,6 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { hash } from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schemas/user.schema';
@@ -12,7 +17,14 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     await this.checkExists(createUserDto.email);
 
-    return 'This action adds a new user';
+    createUserDto.password = await hash(createUserDto.password, 12);
+    const user = await this.userModel.create(createUserDto);
+
+    const userRes = user.toJSON({ minimize: true });
+
+    delete userRes.password;
+
+    return userRes;
   }
 
   async findAll() {
@@ -21,8 +33,16 @@ export class UserService {
 
   async findOne(id: string) {
     validId(id);
+    const user = await this.userModel.findById(id);
+    return user;
+  }
 
-    return `This action returns a #${id} user`;
+  async findOneByEmail(email: string) {
+    const user = await this.userModel.findOne({ email });
+
+    if (!user) throw new NotFoundException('User is not found');
+
+    return user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
