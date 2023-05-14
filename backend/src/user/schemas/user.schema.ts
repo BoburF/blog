@@ -26,6 +26,12 @@ export const UserSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
+    posts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'posts',
+      },
+    ],
   },
   { timestamps: true },
 );
