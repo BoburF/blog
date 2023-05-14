@@ -20,7 +20,7 @@ async function bootstrap() {
     .addTag('blog')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('doc', app, document);
+  SwaggerModule.setup('all', app, document);
   await app.listen(3000);
 
   if (module.hot) {
