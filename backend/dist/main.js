@@ -179,7 +179,7 @@ async function bootstrap() {
         .addTag('blog')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
-    swagger_1.SwaggerModule.setup('doc', app, document);
+    swagger_1.SwaggerModule.setup('all', app, document);
     await app.listen(3000);
     if (true) {
         module.hot.accept();
@@ -996,7 +996,7 @@ exports.UserAuthKeySchema = new mongoose.Schema({
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("8c5b2d948807d1535787")
+/******/ 		__webpack_require__.h = () => ("aaec0176e79b10a36236")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
