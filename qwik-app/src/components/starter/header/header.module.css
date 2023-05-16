@@ -11,6 +11,21 @@
   display: block;
 }
 
+.input{
+  width: 300px;
+}
+
+.input input{
+  width: 100%;
+  border-radius: 5px;
+  outline: none;
+  padding: 5px;
+}
+
+.input input:focus{
+  outline: 3px inset #000;
+}
+
 .header ul {
   margin: 0;
   padding: 0;
