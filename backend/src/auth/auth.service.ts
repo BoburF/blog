@@ -1,19 +1,25 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UserService } from 'src/user/user.service';
 import { CreateRegisterDto } from './dto/register-auth.dto';
 import { compare } from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { AuthKey } from './schemas/auth.schema';
+import { RefreshAuthDto } from './dto/update-auth.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-    @InjectModel('auth') private authModel: Model<AuthKey>,
+    @InjectModel('tokens') private authModel: Model<AuthKey>,
   ) {}
   async login(createAuthDto: CreateAuthDto) {
     const user = await this.userService.findOneByEmail(createAuthDto.email);
@@ -40,6 +46,43 @@ export class AuthService {
     await this.authModel.create({ refreshToken });
     return {
       accessToken: await this.jwtService.signAsync(payload),
+      refreshToken,
+    };
+  }
+
+  async refresh(refreshAuthDto: RefreshAuthDto) {
+    const tokenFromDB = await this.authModel.findOne({
+      refreshToken: refreshAuthDto.refreshToken,
+    });
+
+    if (!tokenFromDB) throw new UnauthorizedException('User is not authorized');
+
+    let payload: null | {
+      email: string;
+      userId: Types.ObjectId;
+      exp: number;
+      ait: number;
+    };
+
+    try {
+      payload = await this.jwtService.verifyAsync(refreshAuthDto.refreshToken);
+    } catch (err) {
+      await this.authModel.findOneAndDelete({
+        refreshToken: refreshAuthDto.refreshToken,
+      });
+      throw new UnauthorizedException('Token is not valid');
+    }
+
+    const refreshToken = await this.jwtService.signAsync({
+      email: payload?.email,
+      userId: payload?.userId,
+    });
+
+    await tokenFromDB.updateOne({ $set: { refreshToken } });
+    await tokenFromDB.save();
+
+    return {
+      accessToken: await this.jwtService.signAsync({ userId: payload.userId }),
       refreshToken,
     };
   }

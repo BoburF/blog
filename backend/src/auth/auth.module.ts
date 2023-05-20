@@ -15,7 +15,7 @@ import { UserAuthKeySchema } from './schemas/auth.schema';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '2d' },
     }),
-    MongooseModule.forFeature([{ name: 'auth', schema: UserAuthKeySchema }]),
+    MongooseModule.forFeature([{ name: 'tokens', schema: UserAuthKeySchema }]),
   ],
   controllers: [AuthController],
   providers: [AuthService],
