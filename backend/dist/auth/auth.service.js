@@ -42,7 +42,9 @@ let AuthService = class AuthService {
     async register(createRegisterDto) {
         const user = await this.userService.create(createRegisterDto);
         const payload = { email: user.email, userId: user._id };
-        const refreshToken = await this.jwtService.signAsync(payload);
+        const refreshToken = await this.jwtService.signAsync(payload, {
+            expiresIn: '7d',
+        });
         await this.authModel.create({ refreshToken });
         return {
             accessToken: await this.jwtService.signAsync(payload),
@@ -66,8 +68,10 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('Token is not valid');
         }
         const refreshToken = await this.jwtService.signAsync({
-            email: payload.email,
-            userId: payload.userId,
+            email: payload === null || payload === void 0 ? void 0 : payload.email,
+            userId: payload === null || payload === void 0 ? void 0 : payload.userId,
+        }, {
+            expiresIn: '7d',
         });
         await tokenFromDB.updateOne({ $set: { refreshToken } });
         await tokenFromDB.save();

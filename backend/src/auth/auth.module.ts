@@ -9,13 +9,13 @@ import { UserAuthKeySchema } from './schemas/auth.schema';
 
 @Module({
   imports: [
-    UserModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '2d' },
     }),
     MongooseModule.forFeature([{ name: 'tokens', schema: UserAuthKeySchema }]),
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

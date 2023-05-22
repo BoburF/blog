@@ -6,6 +6,8 @@ export type User = {
     password: string;
     img: Buffer;
     posts: [];
+    createdAt: Date;
+    updatedAt: Date;
 };
 export declare const UserSchema: mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any>, {}, {}, {}, {}, {
     timestamps: true;

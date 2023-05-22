@@ -24,14 +24,10 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
-    create(createUserDto: CreateUserDto): Promise<import("mongoose").FlattenMaps<import("./schemas/user.schema").User & {
-        _id: import("mongoose").Types.ObjectId;
-    }>>;
     findAll(): Promise<string>;
     findOne(id: string): Promise<import("mongoose").Document<unknown, {}, import("./schemas/user.schema").User> & Omit<import("./schemas/user.schema").User & {
         _id: import("mongoose").Types.ObjectId;

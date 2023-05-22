@@ -1,7 +1,6 @@
 import {
   ForbiddenException,
   Injectable,
-  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -42,7 +41,9 @@ export class AuthService {
     const user = await this.userService.create(createRegisterDto);
 
     const payload = { email: user.email, userId: user._id };
-    const refreshToken = await this.jwtService.signAsync(payload);
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      expiresIn: '7d',
+    });
     await this.authModel.create({ refreshToken });
     return {
       accessToken: await this.jwtService.signAsync(payload),
@@ -73,10 +74,15 @@ export class AuthService {
       throw new UnauthorizedException('Token is not valid');
     }
 
-    const refreshToken = await this.jwtService.signAsync({
-      email: payload?.email,
-      userId: payload?.userId,
-    });
+    const refreshToken = await this.jwtService.signAsync(
+      {
+        email: payload?.email,
+        userId: payload?.userId,
+      },
+      {
+        expiresIn: '7d',
+      },
+    );
 
     await tokenFromDB.updateOne({ $set: { refreshToken } });
     await tokenFromDB.save();

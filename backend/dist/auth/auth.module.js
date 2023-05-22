@@ -20,13 +20,13 @@ let AuthModule = class AuthModule {
 AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            user_module_1.UserModule,
             jwt_1.JwtModule.register({
                 global: true,
                 secret: constants_1.jwtConstants.secret,
                 signOptions: { expiresIn: '2d' },
             }),
             mongoose_1.MongooseModule.forFeature([{ name: 'tokens', schema: auth_schema_1.UserAuthKeySchema }]),
+            user_module_1.UserModule,
         ],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService],
