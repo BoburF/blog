@@ -33,10 +33,10 @@ export class PostService {
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+    return await this.postModel.findByIdAndUpdate(id, updatePostDto);
   }
 
   async remove(id: string) {
-    return `This action removes a #${id} post`;
+    return await this.postModel.findByIdAndDelete(id);
   }
 }
