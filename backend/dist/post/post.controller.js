@@ -17,40 +17,44 @@ const common_1 = require("@nestjs/common");
 const post_service_1 = require("./post.service");
 const create_post_dto_1 = require("./dto/create-post.dto");
 const update_post_dto_1 = require("./dto/update-post.dto");
+const auth_guard_1 = require("../auth/guards/auth.guard");
 let PostController = class PostController {
     constructor(postService) {
         this.postService = postService;
     }
-    create(createPostDto) {
-        return this.postService.create(createPostDto);
+    create(createPostDto, request) {
+        return this.postService.create(createPostDto, request['user']);
     }
     findAll() {
         return this.postService.findAll();
     }
     findOne(id) {
-        return this.postService.findOne(+id);
+        return this.postService.findOne(id);
     }
     update(id, updatePostDto) {
-        return this.postService.update(+id, updatePostDto);
+        return this.postService.update(id, updatePostDto);
     }
     remove(id) {
-        return this.postService.remove(+id);
+        return this.postService.remove(id);
     }
 };
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto]),
+    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto, Request]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "create", null);
 __decorate([
+    (0, auth_guard_1.Public)(),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "findAll", null);
 __decorate([
+    (0, auth_guard_1.Public)(),
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -73,6 +77,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "remove", null);
 PostController = __decorate([
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Controller)('post'),
     __metadata("design:paramtypes", [post_service_1.PostService])
 ], PostController);

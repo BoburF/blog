@@ -10,8 +10,15 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 @Injectable()
 export class PostService {
   constructor(@InjectModel('posts') private postModel: Model<Post>) {}
-  async create(createPostDto: CreatePostDto) {
-    const post = await this.postModel.create(createPostDto);
+  async create(
+    createPostDto: CreatePostDto,
+    userInfo: { email: string; userId: string; iat: number; exp: number },
+  ) {
+    const user = userInfo;
+    const post = await this.postModel.create({
+      ...createPostDto,
+      userId: user.userId,
+    });
 
     await post.save();
     return post;
@@ -21,15 +28,15 @@ export class PostService {
     return await this.postModel.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return await this.postModel.findById(id);
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto) {
+  async update(id: string, updatePostDto: UpdatePostDto) {
     return `This action updates a #${id} post`;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return `This action removes a #${id} post`;
   }
 }

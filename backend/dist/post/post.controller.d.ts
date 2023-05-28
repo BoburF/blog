@@ -29,7 +29,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export declare class PostController {
     private readonly postService;
     constructor(postService: PostService);
-    create(createPostDto: CreatePostDto): Promise<import("mongoose").Document<unknown, {}, import("./schemas/post.schema").Post> & Omit<import("./schemas/post.schema").Post & {
+    create(createPostDto: CreatePostDto, request: Request): Promise<import("mongoose").Document<unknown, {}, import("./schemas/post.schema").Post> & Omit<import("./schemas/post.schema").Post & {
         _id: import("mongoose").Types.ObjectId;
     }, never>>;
     findAll(): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/post.schema").Post> & Omit<import("./schemas/post.schema").Post & {

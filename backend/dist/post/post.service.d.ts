@@ -29,15 +29,20 @@ import { Post } from './schemas/post.schema';
 export declare class PostService {
     private postModel;
     constructor(postModel: Model<Post>);
-    create(createPostDto: CreatePostDto): Promise<import("mongoose").Document<unknown, {}, Post> & Omit<Post & {
+    create(createPostDto: CreatePostDto, userInfo: {
+        email: string;
+        userId: string;
+        iat: number;
+        exp: number;
+    }): Promise<import("mongoose").Document<unknown, {}, Post> & Omit<Post & {
         _id: import("mongoose").Types.ObjectId;
     }, never>>;
     findAll(): Promise<(import("mongoose").Document<unknown, {}, Post> & Omit<Post & {
         _id: import("mongoose").Types.ObjectId;
     }, never>)[]>;
-    findOne(id: number): Promise<import("mongoose").Document<unknown, {}, Post> & Omit<Post & {
+    findOne(id: string): Promise<import("mongoose").Document<unknown, {}, Post> & Omit<Post & {
         _id: import("mongoose").Types.ObjectId;
     }, never>>;
-    update(id: number, updatePostDto: UpdatePostDto): Promise<string>;
-    remove(id: number): Promise<string>;
+    update(id: string, updatePostDto: UpdatePostDto): Promise<string>;
+    remove(id: string): Promise<string>;
 }

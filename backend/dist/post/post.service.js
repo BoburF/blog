@@ -21,8 +21,10 @@ let PostService = class PostService {
     constructor(postModel) {
         this.postModel = postModel;
     }
-    async create(createPostDto) {
-        const post = await this.postModel.create(createPostDto);
+    async create(createPostDto, userInfo) {
+        const user = userInfo;
+        common_1.Logger.log(user);
+        const post = await this.postModel.create(Object.assign(Object.assign({}, createPostDto), { userId: user.userId }));
         await post.save();
         return post;
     }

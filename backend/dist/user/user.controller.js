@@ -21,9 +21,6 @@ let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
-    findAll() {
-        return this.userService.findAll();
-    }
     findOne(id) {
         return this.userService.findOne(id);
     }
@@ -34,13 +31,6 @@ let UserController = class UserController {
         return this.userService.remove(id);
     }
 };
-__decorate([
-    (0, auth_guard_1.Public)(),
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], UserController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
